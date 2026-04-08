@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Panel Licencias — Zync Dental Pro · A2K Studio</title>
+<style>
+:root{
+  --accent:#0891B2;--neon:#06B6D4;--bg:#0A1628;--bg2:#0F1E35;
+  --card:#162540;--border:#1E3A5F;--text:#E2EEF8;--text2:#7A9FC0;
+  --text3:#4A7A9B;--warn:#F59E0B;--danger:#EF4444;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:Inter,sans-serif;min-height:100vh;padding:20px;}
+.header{text-align:center;padding:36px 20px 24px;border-bottom:1px solid var(--border);margin-bottom:28px;}
+.logo{font-size:52px;margin-bottom:8px;}
+.title{font-size:26px;font-weight:900;color:var(--neon);letter-spacing:-1px;}
+.subtitle{font-size:12px;color:var(--text2);margin-top:4px;}
+.badge{display:inline-block;background:linear-gradient(135deg,#0891B2,#06B6D4);color:#fff;font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:1px;margin-top:8px;}
+.container{max-width:780px;margin:0 auto;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px;margin-bottom:18px;}
+.card-title{font-size:15px;font-weight:800;color:var(--neon);margin-bottom:14px;}
+.form-label{font-size:10px;font-weight:700;color:var(--text2);letter-spacing:1px;text-transform:uppercase;margin-bottom:5px;display:block;}
+.form-input,.form-select{width:100%;background:var(--bg2);border:1.5px solid var(--border);border-radius:9px;color:var(--text);font-size:14px;padding:10px 13px;outline:none;margin-bottom:12px;}
+.form-input:focus,.form-select:focus{border-color:var(--neon);}
+.form-select option{background:var(--bg2);}
+.btn{padding:10px 18px;border-radius:9px;border:none;font-weight:700;font-size:13px;cursor:pointer;transition:.2s;}
+.btn-primary{background:linear-gradient(135deg,#0891B2,#06B6D4);color:#fff;width:100%;padding:12px;}
+.btn-demo{background:linear-gradient(135deg,#F59E0B,#EF4444);color:#fff;width:100%;padding:12px;}
+.btn-ghost{background:var(--bg2);color:var(--text2);border:1px solid var(--border);flex:1;padding:10px;}
+.result-box{display:none;background:var(--bg);border:2px solid var(--neon);border-radius:12px;padding:16px;margin-top:12px;text-align:center;}
+.result-code{font-family:monospace;font-size:22px;font-weight:700;color:var(--neon);letter-spacing:3px;margin:6px 0;}
+.result-info{font-size:11px;color:var(--text2);}
+.demo-box{border-color:var(--warn) !important;}
+.demo-code{color:var(--warn) !important;}
+.tab-row{display:flex;gap:8px;margin-bottom:18px;}
+.tab-btn{flex:1;padding:10px;border:1.5px solid var(--border);border-radius:9px;background:var(--bg2);color:var(--text2);font-weight:600;font-size:13px;cursor:pointer;transition:.2s;}
+.tab-btn.active{background:linear-gradient(135deg,#0891B2,#06B6D4);border-color:var(--neon);color:#fff;}
+.btn-row{display:flex;gap:8px;margin-top:10px;}
+.info-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border);font-size:12px;}
+.info-row:last-child{border:none;}
+.info-val{font-family:monospace;font-size:11px;font-weight:700;color:var(--neon);}
+.master-box{background:var(--bg2);border:1px dashed var(--border);border-radius:9px;padding:12px;margin-bottom:10px;}
+.master-label{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;}
+.master-code-display{font-family:monospace;font-size:16px;font-weight:700;color:var(--accent);letter-spacing:2px;}
+.pw-overlay{position:fixed;inset:0;background:rgba(10,22,40,.97);z-index:9999;display:flex;align-items:center;justify-content:center;}
+.pw-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:34px;max-width:360px;width:100%;text-align:center;}
+.pw-icon{font-size:50px;margin-bottom:12px;}
+.pw-title{font-size:20px;font-weight:900;color:var(--neon);margin-bottom:5px;}
+.pw-sub{font-size:11px;color:var(--text2);margin-bottom:18px;}
+.pw-error{color:var(--danger);font-size:12px;margin-top:8px;display:none;}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.toast-cont{position:fixed;bottom:20px;right:20px;z-index:9999;}
+.toast{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:10px 14px;margin-top:7px;font-size:12px;display:flex;align-items:center;gap:7px;min-width:200px;}
+.footer{text-align:center;padding:28px;color:var(--text3);font-size:11px;border-top:1px solid var(--border);margin-top:26px;}
+.hist-item{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);}
+</style>
+</head>
+<body>
+
+<div class="pw-overlay" id="pwOverlay">
+  <div class="pw-card">
+    <div class="pw-icon">&#x1F9B7;</div>
+    <div class="pw-title">Panel Admin A2K</div>
+    <div class="pw-sub">Ingresa la contrasena de administrador para continuar</div>
+    <input type="password" id="pwInput" class="form-input" placeholder="Contrasena..." style="text-align:center;" onkeydown="if(event.key==='Enter')checkPw()">
+    <button class="btn btn-primary" onclick="checkPw()">Entrar al Panel</button>
+    <div class="pw-error" id="pwError">Contrasena incorrecta. Intenta de nuevo.</div>
+    <div style="margin-top:14px;font-size:10px;color:var(--text3);">A2K Digital Studio 2026</div>
+  </div>
+</div>
+
+<div id="mainPanel" style="display:none;">
+<div class="container">
+
+  <div class="header">
+    <div class="logo">&#x1F9B7;</div>
+    <div class="title">Panel de Licencias</div>
+    <div class="subtitle">Zync Dental Pro - A2K Digital Studio</div>
+    <div class="badge">ADMIN A2K</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">&#x1F511; Codigos MASTER (Bypass Total)</div>
+    <div class="master-box">
+      <div class="master-label">Master 1 - Interno A2K</div>
+      <div class="master-code-display">DENT-ABIG-2026</div>
+    </div>
+    <div class="master-box">
+      <div class="master-label">Master 2 - Zync</div>
+      <div class="master-code-display">DENT-ZYNC-2026</div>
+    </div>
+    <p style="font-size:11px;color:var(--text3);margin-top:6px;">Solo para uso interno A2K Studio. Activan cualquier dispositivo sin vencimiento.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">&#x1F4DD; Generar Licencia</div>
+    <div class="tab-row">
+      <button class="tab-btn active" id="tabPRO" onclick="switchTab('PRO')">&#x1F31F; Licencia PRO</button>
+      <button class="tab-btn" id="tabDEMO" onclick="switchTab('DEMO')">&#x1F9EA; Codigo DEMO</button>
+    </div>
+
+    <div id="panelPRO">
+      <label class="form-label">Nombre de la Dental</label>
+      <input type="text" id="pro-neg" class="form-input" placeholder="Dental San Jose...">
+      <div class="grid-2">
+        <div>
+          <label class="form-label">Terminales</label>
+          <select id="pro-term" class="form-select">
+            <option value="1">1 terminal</option>
+            <option value="2" selected>2 terminales</option>
+            <option value="3">3 terminales</option>
+            <option value="5">5 terminales</option>
+          </select>
+        </div>
+        <div style="display:flex;align-items:flex-end;">
+          <button class="btn btn-primary" onclick="generarPRO()" style="margin-bottom:12px;">Generar PRO</button>
+        </div>
+      </div>
+      <div class="result-box" id="proResult">
+        <div style="font-size:10px;color:var(--text2);letter-spacing:1px;">CODIGO PRO GENERADO</div>
+        <div class="result-code" id="proCode"></div>
+        <div class="result-info" id="proInfo"></div>
+        <div class="btn-row">
+          <button class="btn btn-ghost" onclick="copiar('proCode')">Copiar</button>
+          <button class="btn btn-ghost" onclick="waEnviar('pro')">WhatsApp</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="panelDEMO" style="display:none;">
+      <label class="form-label">Nombre de la Dental</label>
+      <input type="text" id="demo-neg" class="form-input" placeholder="Dental La Salud...">
+      <div class="grid-2">
+        <div>
+          <label class="form-label">Dias de Demo</label>
+          <select id="demo-dias" class="form-select" onchange="actualizarFecha()">
+            <option value="3" selected>3 dias</option>
+            <option value="5">5 dias</option>
+            <option value="7">7 dias</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">Vence el</label>
+          <input type="text" id="demo-fecha" class="form-input" readonly style="background:var(--bg);color:var(--warn);font-weight:700;text-align:center;">
+        </div>
+      </div>
+      <button class="btn btn-demo" onclick="generarDEMO()">Generar Codigo DEMO</button>
+      <div class="result-box demo-box" id="demoResult" style="margin-top:12px;">
+        <div style="font-size:10px;color:var(--text2);letter-spacing:1px;">CODIGO DEMO GENERADO</div>
+        <div class="result-code demo-code" id="demoCode"></div>
+        <div class="result-info" id="demoInfo"></div>
+        <div class="btn-row">
+          <button class="btn btn-ghost" onclick="copiar('demoCode')">Copiar</button>
+          <button class="btn btn-ghost" onclick="waEnviar('demo')">WhatsApp</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Sistema Info</div>
+    <div class="info-row"><span>Sistema</span><span class="info-val">Zync Dental Pro v1.0</span></div>
+    <div class="info-row"><span>Desarrollado por</span><span class="info-val">A2K Digital Studio</span></div>
+    <div class="info-row"><span>WhatsApp</span><span class="info-val">+58 416 411 7331</span></div>
+    <div class="info-row"><span>Licencia PRO</span><span class="info-val">DENT-XXXX-XXXX</span></div>
+    <div class="info-row"><span>Licencia DEMO</span><span class="info-val">DDEMO-XXXX-XXXX</span></div>
+    <div class="info-row"><span>DB Prefix</span><span class="info-val">zd_</span></div>
+    <div class="info-row"><span>App en vivo</span>
+      <a href="https://tiendadigitalaipro.github.io/zync-dental-pro/" target="_blank" style="color:var(--neon);font-family:monospace;font-size:11px;font-weight:700;text-decoration:none;">Abrir App</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Historial de Sesion</div>
+    <div id="historialLics" style="font-size:12px;color:var(--text2);text-align:center;padding:18px;">
+      Sin codigos generados aun.
+    </div>
+  </div>
+
+</div>
+</div>
+
+<div class="toast-cont" id="toastCont"></div>
+<div class="footer">Zync Dental Pro - Panel Admin A2K Digital Studio 2026 - Acceso restringido</div>
+
+<script>
+var CHARS='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+var SEC_PRO='DENT2026A2K';
+var SEC_DEMO='DENTD3MO77';
+var MASTER_PW=['DENT2026admin','ZYNC2026dental','a2k2026'];
+var histSesion=[];
+var _lp=null,_ld=null;
+
+function djb2(s){var h=5381;for(var i=0;i<s.length;i++){h=((h<<5)+h)^s.charCodeAt(i);h=h>>>0;}return h;}
+function toB(n,len){var r='',b=CHARS.length;for(var i=0;i<len;i++){r=CHARS[n%b]+r;n=Math.floor(n/b);}return r;}
+
+function checkPw(){
+  var pw=document.getElementById('pwInput').value;
+  if(MASTER_PW.includes(pw)){
+    document.getElementById('pwOverlay').style.display='none';
+    document.getElementById('mainPanel').style.display='';
+    actualizarFecha();
+  } else {
+    document.getElementById('pwError').style.display='block';
+    document.getElementById('pwInput').value='';
+    document.getElementById('pwInput').focus();
+  }
+}
+
+function switchTab(t){
+  document.getElementById('panelPRO').style.display=t==='PRO'?'':'none';
+  document.getElementById('panelDEMO').style.display=t==='DEMO'?'':'none';
+  document.getElementById('tabPRO').className='tab-btn'+(t==='PRO'?' active':'');
+  document.getElementById('tabDEMO').className='tab-btn'+(t==='DEMO'?' active':'');
+  if(t==='DEMO')actualizarFecha();
+}
+
+function actualizarFecha(){
+  var dias=parseInt(document.getElementById('demo-dias').value)||3;
+  var v=new Date();v.setDate(v.getDate()+dias);
+  var el=document.getElementById('demo-fecha');
+  if(el)el.value=v.toLocaleDateString('es-VE',{day:'numeric',month:'short',year:'numeric'});
+}
+
+function generarPRO(){
+  var neg=document.getElementById('pro-neg').value.trim();
+  if(!neg){showToast('Ingresa el nombre de la dental','warn');return;}
+  var s1=toB(djb2(neg.toUpperCase()+Date.now().toString()),4);
+  var s2=toB(djb2(s1+SEC_PRO),4);
+  var code='DENT-'+s1+'-'+s2;
+  var term=document.getElementById('pro-term').value;
+  _lp={code:code,neg:neg,term:term};
+  document.getElementById('proCode').textContent=code;
+  document.getElementById('proInfo').textContent=neg+' - '+term+' terminal'+(parseInt(term)>1?'es':'')+' - PRO Vitalicio';
+  document.getElementById('proResult').style.display='block';
+  addHistorial('PRO',code,neg);
+  showToast('Codigo PRO generado!','success');
+}
+
+function generarDEMO(){
+  var neg=document.getElementById('demo-neg').value.trim();
+  if(!neg){showToast('Ingresa el nombre de la dental','warn');return;}
+  var dias=parseInt(document.getElementById('demo-dias').value)||3;
+  var s1=toB(djb2(neg.toUpperCase()+Date.now().toString()),4);
+  var s2=toB(djb2(s1+SEC_DEMO),4);
+  var code='DDEMO-'+s1+'-'+s2;
+  var vence=new Date();vence.setDate(vence.getDate()+dias);
+  var vs=vence.toLocaleDateString('es-VE',{day:'2-digit',month:'2-digit',year:'numeric'});
+  _ld={code:code,neg:neg,dias:dias,vs:vs};
+  document.getElementById('demoCode').textContent=code;
+  document.getElementById('demoInfo').textContent=neg+' - Demo '+dias+' dias - Vence: '+vs;
+  document.getElementById('demoResult').style.display='block';
+  addHistorial('DEMO',code,neg+' ('+dias+'d)');
+  showToast('Codigo DEMO generado!','success');
+}
+
+function copiar(id){
+  var code=document.getElementById(id).textContent;
+  navigator.clipboard.writeText(code).then(function(){showToast('Codigo copiado!','success');});
+}
+
+function waEnviar(tipo){
+  var msg='';
+  if(tipo==='pro'&&_lp){
+    msg='Hola! Tu licencia Zync Dental Pro esta lista:\n\n'
+      +'--- LICENCIA PRO ---\n'
+      +'Dental: '+_lp.neg+'\n'
+      +'Terminales: '+_lp.term+'\n'
+      +'Codigo: '+_lp.code+'\n'
+      +'Vigencia: Vitalicio\n\n'
+      +'A2K Digital Studio +58 416 411 7331';
+  } else if(tipo==='demo'&&_ld){
+    msg='Hola! Tu codigo demo Zync Dental Pro:\n\n'
+      +'--- DEMO TEMPORAL ---\n'
+      +'Dental: '+_ld.neg+'\n'
+      +'Codigo: '+_ld.code+'\n'
+      +'Vence: '+_ld.vs+' ('+_ld.dias+' dias)\n\n'
+      +'Para activar PRO: A2K Digital Studio +58 416 411 7331';
+  }
+  if(msg)window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');
+}
+
+function addHistorial(tipo,code,neg){
+  histSesion.unshift({tipo:tipo,code:code,neg:neg,h:new Date().toLocaleTimeString('es-VE',{hour:'2-digit',minute:'2-digit'})});
+  var el=document.getElementById('historialLics');
+  if(!el)return;
+  el.innerHTML=histSesion.map(function(x){
+    var col=x.tipo==='PRO'?'#06B6D4':'#F59E0B';
+    return '<div class="hist-item">'
+      +'<div><span style="background:'+col+';color:#000;font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;margin-right:7px">'+x.tipo+'</span>'
+      +'<span style="font-family:monospace;font-size:12px;color:'+col+'">'+x.code+'</span></div>'
+      +'<div style="text-align:right"><div style="font-size:11px;color:#E2EEF8">'+x.neg+'</div><div style="font-size:10px;color:#4A7A9B">'+x.h+'</div></div>'
+      +'</div>';
+  }).join('');
+}
+
+function showToast(msg,tipo){
+  var c=document.getElementById('toastCont');if(!c)return;
+  var t=document.createElement('div');t.className='toast';
+  t.innerHTML='<span>'+(tipo==='success'?'OK':tipo==='warn'?'AVS':'ERR')+'</span><span>'+msg+'</span>';
+  c.appendChild(t);
+  setTimeout(function(){t.style.opacity='0';t.style.transform='translateX(20px)';t.style.transition='all .3s';setTimeout(function(){if(t.parentNode)t.parentNode.removeChild(t);},300);},3000);
+}
+
+document.addEventListener('DOMContentLoaded',function(){
+  var i=document.getElementById('pwInput');if(i)i.focus();
+});
+</script>
+</body>
+</html>
