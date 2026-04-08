@@ -1471,7 +1471,7 @@ function renderDashboard(){
     var recHoy=recs.filter(function(r){return r.fecha===hoyStr;}).slice(-4).reverse();
     if(!recHoy.length){recEl.innerHTML='<div style="text-align:center;padding:8px;color:var(--text3);font-size:11px">Sin recetas hoy</div>';}
     else recEl.innerHTML=recHoy.map(function(r){
-      return '<div style="padding:5px 0;border-bottom:1px solid rgba(5,150,105,0.10)"><div style="font-size:11px;font-weight:700;color:var(--text)">'+r.Paciente+'</div><div style="font-size:10px;color:var(--text3)">Dr. '+r.medico+' · '+r.Producto Dentals.substring(0,25)+'</div></div>';
+      return '<div style="padding:5px 0;border-bottom:1px solid rgba(5,150,105,0.10)"><div style="font-size:11px;font-weight:700;color:var(--text)">'+r.Paciente+'</div><div style="font-size:10px;color:var(--text3)">Dr. '+r.medico+' · '+(r['Producto Dentals']||'').substring(0,25)+'</div></div>';
     }).join('');
   }
 }
@@ -1927,9 +1927,9 @@ function renderAlertas(){
 }
 
 // RECETAS
-function renderRecetas(){var recs=DB.get('recetas')||[];var tbody=document.getElementById('recetasTable');if(!tbody)return;if(!recs.length){tbody.innerHTML='<tr><td colspan="6" style="text-align:center;padding:28px;color:var(--text2)">Sin recetas</td></tr>';return;}tbody.innerHTML=recs.slice().reverse().map(function(r,i){return '<tr><td>#'+(recs.length-i)+'</td><td>'+fmtDate(r.fecha)+'</td><td class="med-name">'+r.Paciente+'</td><td>'+r.medico+'</td><td style="max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+r.Producto Dentals+'</td><td><button onclick="deleteReceta('+r.id+')" class="btn btn-sm btn-danger" style="padding:4px 7px">Del</button></td></tr>';}).join('');}
+function renderRecetas(){var recs=DB.get('recetas')||[];var tbody=document.getElementById('recetasTable');if(!tbody)return;if(!recs.length){tbody.innerHTML='<tr><td colspan="6" style="text-align:center;padding:28px;color:var(--text2)">Sin recetas</td></tr>';return;}tbody.innerHTML=recs.slice().reverse().map(function(r,i){return '<tr><td>#'+(recs.length-i)+'</td><td>'+fmtDate(r.fecha)+'</td><td class="med-name">'+r.Paciente+'</td><td>'+r.medico+'</td><td style="max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+r['Producto Dentals']+'</td><td><button onclick="deleteReceta('+r.id+')" class="btn btn-sm btn-danger" style="padding:4px 7px">Del</button></td></tr>';}).join('');}
 function openAddReceta(){['rec-Paciente','rec-ci','rec-medico','rec-meds','rec-notas'].forEach(function(f){var el=document.getElementById(f);if(el)el.value='';});document.getElementById('rec-fecha').value=new Date().toISOString().split('T')[0];openModal('modalReceta');}
-function saveReceta(){var pac=document.getElementById('rec-Paciente').value.trim();if(!pac)return showToast('El Paciente es obligatorio','warn');var rec={id:Date.now(),Paciente:pac,ci:document.getElementById('rec-ci').value,medico:document.getElementById('rec-medico').value,fecha:document.getElementById('rec-fecha').value,Producto Dentals:document.getElementById('rec-meds').value,notas:document.getElementById('rec-notas').value};var recs=DB.get('recetas')||[];recs.push(rec);DB.set('recetas',recs);closeModal('modalReceta');renderRecetas();showToast('Receta guardada','success');}
+function saveReceta(){var pac=document.getElementById('rec-Paciente').value.trim();if(!pac)return showToast('El Paciente es obligatorio','warn');var rec={id:Date.now(),Paciente:pac,ci:document.getElementById('rec-ci').value,medico:document.getElementById('rec-medico').value,fecha:document.getElementById('rec-fecha').value,'Producto Dentals':document.getElementById('rec-meds').value,notas:document.getElementById('rec-notas').value};var recs=DB.get('recetas')||[];recs.push(rec);DB.set('recetas',recs);closeModal('modalReceta');renderRecetas();showToast('Receta guardada','success');}
 function deleteReceta(id){if(!confirm('Eliminar receta?'))return;var recs=DB.get('recetas')||[];DB.set('recetas',recs.filter(function(r){return r.id!==id;}));renderRecetas();}
 
 // CLIENTES
