@@ -365,7 +365,7 @@ td.med-name{color:var(--text);font-weight:700}
       </div>
       <div class="form-group">
         <label class="form-label">Codigo de Activacion</label>
-        <input type="text" id="ln-code" class="form-input" placeholder="FARM-XXXX-XXXX" style="font-family:monospace;font-size:15px;font-weight:700;letter-spacing:2px;text-transform:uppercase" oninput="this.value=this.value.toUpperCase()">
+        <input type="text" id="ln-code" class="form-input" placeholder="DENT-XXXX-XXXX" style="font-family:monospace;font-size:15px;font-weight:700;letter-spacing:2px;text-transform:uppercase" oninput="this.value=this.value.toUpperCase()">
       </div>
       <div class="device-info">
         Tu codigo esta ligado a este dispositivo.
@@ -1057,7 +1057,7 @@ td.med-name{color:var(--text);font-weight:700}
 
 // STORAGE
 var _memDB={};
-var _lsOK=(function(){try{localStorage.setItem('_fp_t','1');localStorage.removeItem('_fp_t');return true;}catch(e){return false;}})();
+var _lsOK=(function(){try{localStorage.setItem('_zd_t','1');localStorage.removeItem('_zd_t');return true;}catch(e){return false;}})();
 const DB={
   get:function(k){try{if(_lsOK)return JSON.parse(localStorage.getItem('zd_'+k));return _memDB['zd_'+k]||null;}catch(e){return _memDB['zd_'+k]||null;}},
   set:function(k,v){try{if(_lsOK)localStorage.setItem('zd_'+k,JSON.stringify(v));_memDB['zd_'+k]=v;}catch(e){_memDB['zd_'+k]=v;}},
@@ -1070,7 +1070,7 @@ function getDeviceId(){
     var c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
     function r4(){var x='';for(var i=0;i<4;i++)x+=c[Math.floor(Math.random()*c.length)];return x;}
     var id='DEV-'+r4()+'-'+r4();DB.set('device_id',id);return id;
-  }catch(e){return 'DEV-FARM-0001';}
+  }catch(e){return 'DEV-DENT-0001';}
 }
 const DEVICE_ID=getDeviceId();
 
@@ -2820,6 +2820,7 @@ document.addEventListener('DOMContentLoaded', function(){ _cargarColoresFarm(); 
 </script>
 </body>
 </html>
+
 
 
 
